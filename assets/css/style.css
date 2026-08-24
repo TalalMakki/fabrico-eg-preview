@@ -422,17 +422,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: #fff; font-size: 0.8rem; letter-spacing: 0.08em;
 }
 
-.about-media--reel{
-  aspect-ratio: auto;
-  overflow: visible;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border-radius: 0;
+.about-media--video{
+  aspect-ratio: 492/818;
+  background: #000;
 }
-.about-media--reel::after{ content: none; }
-.about-media--reel iframe{ border-radius: var(--radius-lg); }
+.about-media--video video{
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.about-media--video::after{ content: none; }
 
 .quote-mark{
   font-family: var(--ff-display);
