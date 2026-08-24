@@ -422,6 +422,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: #fff; font-size: 0.8rem; letter-spacing: 0.08em;
 }
 
+.about-media--reel{
+  aspect-ratio: auto;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border-radius: 0;
+}
+.about-media--reel::after{ content: none; }
+.about-media--reel iframe{ border-radius: var(--radius-lg); }
+
 .quote-mark{
   font-family: var(--ff-display);
   font-size: 4.5rem; line-height: 1; color: var(--clay-tint);
