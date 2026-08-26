@@ -110,6 +110,8 @@ section{ position: relative; }
 .section-head .sub{ margin-top: var(--space-2); font-size: 1.05rem; color: #43403a; max-width: 60ch; }
 .section-head .en{ font-family: var(--ff-display); font-style: italic; color: #7a756b; font-size: 0.95rem; letter-spacing: 0.02em; margin-top: 6px; }
 
+body.lang-en .translated-echo{ display: none; }
+
 .on-ink{ background: var(--ink); color: var(--cream); }
 .on-ink .eyebrow{ color: #D98B85; }
 .on-ink .eyebrow::before{ background: #D98B85; }
@@ -118,7 +120,7 @@ section{ position: relative; }
 
 /* Skip link */
 .skip-link{
-  position: absolute; right: 12px; top: -60px; z-index: 200;
+  position: absolute; inset-inline-start: 12px; top: -60px; z-index: 200;
   background: var(--ink); color: var(--cream); padding: 12px 18px; border-radius: var(--radius);
   transition: top var(--dur-s) var(--ease);
 }
@@ -236,6 +238,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .icon-btn:hover{ background: rgba(242,239,230,0.12); transform: translateY(-2px); }
 .icon-btn svg{ width: 19px; height: 19px; }
+
+.lang-toggle{
+  min-height: 40px; padding: 0 16px; border-radius: 999px;
+  border: 1px solid rgba(242,239,230,0.28); background: transparent;
+  color: var(--cream); font-family: var(--ff-body); font-weight: 700;
+  font-size: 0.78rem; letter-spacing: 0.06em;
+  transition: background var(--dur-s) var(--ease), border-color var(--dur-s) var(--ease), transform var(--dur-s) var(--ease);
+}
+.lang-toggle:hover{ background: rgba(242,239,230,0.12); transform: translateY(-2px); }
+#mobile-nav .lang-toggle{ min-height: 50px; }
 
 .menu-toggle{
   display: none;

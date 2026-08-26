@@ -3,6 +3,56 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ===== Language toggle (AR default / EN) ===== */
+  var LANG_KEY = "fabrico-lang";
+  var TRANSLATE_ATTRS = ["alt", "aria-label", "placeholder", "title", "content"];
+
+  function translateEl(el, lang) {
+    if (el.hasAttribute("data-en-html")) {
+      if (!el.hasAttribute("data-ar-html")) el.setAttribute("data-ar-html", el.innerHTML);
+      el.innerHTML = lang === "en" ? el.getAttribute("data-en-html") : el.getAttribute("data-ar-html");
+    } else if (el.hasAttribute("data-en")) {
+      if (!el.hasAttribute("data-ar")) el.setAttribute("data-ar", el.textContent);
+      el.textContent = lang === "en" ? el.getAttribute("data-en") : el.getAttribute("data-ar");
+    }
+    TRANSLATE_ATTRS.forEach(function (attr) {
+      var enAttr = "data-en-" + attr;
+      if (!el.hasAttribute(enAttr)) return;
+      var arAttr = "data-ar-" + attr;
+      if (!el.hasAttribute(arAttr)) el.setAttribute(arAttr, el.getAttribute(attr) || "");
+      el.setAttribute(attr, lang === "en" ? el.getAttribute(enAttr) : el.getAttribute(arAttr));
+    });
+  }
+
+  function applyLanguage(lang) {
+    document.documentElement.setAttribute("lang", lang);
+    document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    document.body.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    document.documentElement.setAttribute("data-current-lang", lang);
+    document.body.classList.toggle("lang-en", lang === "en");
+
+    document.querySelectorAll(
+      "[data-en], [data-en-html], [data-en-alt], [data-en-aria-label], [data-en-placeholder], [data-en-title], [data-en-content]"
+    ).forEach(function (el) { translateEl(el, lang); });
+
+    document.querySelectorAll(".lang-toggle").forEach(function (btn) {
+      btn.textContent = lang === "ar" ? "EN" : "عربي";
+    });
+
+    try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+  }
+
+  var savedLang = "ar";
+  try { savedLang = localStorage.getItem(LANG_KEY) || "ar"; } catch (e) {}
+  applyLanguage(savedLang);
+
+  document.querySelectorAll(".lang-toggle").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var current = document.documentElement.getAttribute("data-current-lang") || "ar";
+      applyLanguage(current === "ar" ? "en" : "ar");
+    });
+  });
+
   /* Preloader */
   window.addEventListener("load", function () {
     var pre = document.getElementById("preloader");
@@ -82,11 +132,21 @@
       var fabric = form.querySelector("#inq-fabric").value;
       var msg = form.querySelector("#inq-message").value.trim();
 
-      var lines = ["مرحباً فابريكو،"];
-      if (name) lines.push("الاسم: " + name);
-      if (fabric) lines.push("مهتم بقماش: " + fabric);
-      if (msg) lines.push("الرسالة: " + msg);
-      if (!name && !fabric && !msg) lines.push("حاب أستفسر عن أقمشتكم وأسعار الجملة.");
+      var currentLang = document.documentElement.getAttribute("data-current-lang") || "ar";
+      var lines;
+      if (currentLang === "en") {
+        lines = ["Hello Fabrico,"];
+        if (name) lines.push("Name: " + name);
+        if (fabric) lines.push("Interested in fabric: " + fabric);
+        if (msg) lines.push("Message: " + msg);
+        if (!name && !fabric && !msg) lines.push("I'd like to ask about your fabrics and wholesale prices.");
+      } else {
+        lines = ["مرحباً فابريكو،"];
+        if (name) lines.push("الاسم: " + name);
+        if (fabric) lines.push("مهتم بقماش: " + fabric);
+        if (msg) lines.push("الرسالة: " + msg);
+        if (!name && !fabric && !msg) lines.push("حاب أستفسر عن أقمشتكم وأسعار الجملة.");
+      }
 
       var text = encodeURIComponent(lines.join("\n"));
       window.open("https://wa.me/201044888184?text=" + text, "_blank", "noopener");
