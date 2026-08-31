@@ -680,7 +680,9 @@ footer{ background: var(--ink); color: rgba(242,239,230,0.75); padding: var(--sp
 .footer-credit{
   display: flex; align-items: center; gap: 8px;
   font-size: 0.8rem; color: rgba(242,239,230,0.5);
+  transition: color var(--dur-s) var(--ease);
 }
+.footer-credit:hover{ color: rgba(242,239,230,0.85); }
 .footer-credit img{ width: 18px; height: auto; opacity: 0.9; }
 
 /* Utility */
